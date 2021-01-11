@@ -13,6 +13,8 @@ progress = "^1.5"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+black = "^20.8b1"
+isort = "^5.7.0"
 
 [tool.poetry.scripts]
 ytcomp = 'comp.run:run'
