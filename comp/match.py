@@ -11,7 +11,9 @@ def find_match(ytParams, frontend):
     pytest parameters to match those of nose and then comparing the
     two.
     """
-    with open(f"{frontend}/{frontend}_answers_000.yaml", "r") as fd:
+    yf = "/home/latitude/data/yt_data/answers/"
+    yf += f"{frontend}/{frontend}_answers_000.yaml"
+    with open(yf, "r") as fd:
         tests = yaml.safe_load(fd)
         for test, params in tests.items():
             params = convert_pytest_params(params, ytParams)

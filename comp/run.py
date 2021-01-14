@@ -22,6 +22,7 @@ def run():
     """
     frontend = parse_args()
     noseFile = f"{frontend}/local-{frontend}/local-{frontend}"
+    noseFile = "/home/latitude/data/yt_data/answers/" + noseFile
     progBar = get_prog_bar(noseFile)
     with shelve.open(noseFile, "r") as yfd:
         # The yt shelve file is keyed by ds then test description
@@ -40,7 +41,9 @@ def run():
                 try:
                     compare_answers(ytData, myData, ytParsedDesc["test"])
                 except:
-                    with open(f"{frontend}_failures.txt", "a") as ffd:
+                    errorFile = "/home/latitude/data/yt_data/answers/"
+                    errorFile += f"{frontend}/{frontend}_failures.txt"
+                    with open(errorFile, "a") as ffd:
                         ffd.write(ytDesc + "\t" + myDesc + "\n")
                 progBar.next()
     progBar.finish()

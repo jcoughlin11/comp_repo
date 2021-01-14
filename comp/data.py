@@ -11,7 +11,9 @@ def get_my_data(desc, test, frontend):
     # erroneous groups
     myData = None
     desc = desc.replace("/", "_")
-    with h5py.File(f"{frontend}/{frontend}_answers_raw_000.h5", "r") as fd:
+    hf = "/home/latitude/data/yt_data/answers/"
+    hf += f"{frontend}/{frontend}_answers_raw_000.h5"
+    with h5py.File(hf, "r") as fd:
         data = fd[desc][test]
         if isinstance(data, h5py.Group):
             myData = parse_group(data)
