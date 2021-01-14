@@ -6,7 +6,7 @@ from .registers import objRegister
 
 
 # ============================================
-#                parse_yt_desc
+#               parse_yt_desc
 # ============================================
 def parse_yt_desc(desc, frontend):
     """
@@ -21,7 +21,7 @@ def parse_yt_desc(desc, frontend):
     components = sanitize_yt_desc(desc, frontend)
     params["test"] = camel_to_snake(components[0])
     params["ds"] = components[1]
-    params["dobj"] = components[2]
+    params["d"] = components[2]
     otherParams = get_other_yt_params(params["test"], components[3:])
     params.update(otherParams)
     # Undo the underscore removal
@@ -106,9 +106,9 @@ def get_other_yt_params(testName, otherComponents):
         "pixelized_particle_projection_values",
     ]
     if testName in ["grid_values", "field_values"]:
-        otherParams["field"] = otherComponents[0]
+        otherParams["f"] = otherComponents[0]
     elif testName in projTests:
-        otherParams["field"] = otherComponents[0]
-        otherParams["axis"] = otherComponents[1]
-        otherParams["weight"] = otherComponents[2]
+        otherParams["f"] = otherComponents[0]
+        otherParams["a"] = otherComponents[1]
+        otherParams["w"] = otherComponents[2]
     return otherParams

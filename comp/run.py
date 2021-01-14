@@ -21,7 +21,7 @@ def run():
         3. Compare
     """
     frontend = parse_args()
-    noseFile = f"local-{frontend}/local-{frontend}"
+    noseFile = f"{frontend}/local-{frontend}/local-{frontend}"
     progBar = get_prog_bar(noseFile)
     with shelve.open(noseFile, "r") as yfd:
         # The yt shelve file is keyed by ds then test description
@@ -31,11 +31,11 @@ def run():
                 # pytest description
                 ytParsedDesc = parse_yt_desc(ytDesc, frontend)
                 # Find the matching pytest description
-                myDesc = find_match(ytParsedDesc)
+                myDesc = find_match(ytParsedDesc, frontend)
                 # Load the yt data
                 ytData = yfd[ds][ytDesc]
                 # Load pytest data
-                myData = get_my_data(myDesc, ytParsedDesc["test"])
+                myData = get_my_data(myDesc, ytParsedDesc["test"], frontend)
                 # Now compare the results
                 try:
                     compare_answers(ytData, myData, ytParsedDesc["test"])
@@ -63,7 +63,7 @@ def parse_args():
 #                 get_prog_bar
 # ============================================
 def get_prog_bar(noseFile):
-    nTests = get_n_tests(frontend)
+    nTests = get_n_tests(noseFile)
     progBar = Bar("Processing", max=nTests)
     return progBar
 
