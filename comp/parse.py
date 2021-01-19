@@ -36,7 +36,7 @@ def sanitize_yt_desc(desc, frontend):
     """
     Certain ds names, fields, and objects have underscores in them,
     which messes up parsing, since each test component is also
-    separated by an underscore. This function removes the inter-
+    separated by an underscore. This function removes the intra-
     component underscores.
     """
     # Datasets
@@ -60,27 +60,46 @@ def sanitize_component(desc, componentType, frontend):
         register = objRegister[frontend]
     for comp in register:
         if comp in desc:
-            joined = "".join(comp.split("_"))
-            desc = desc.replace(comp, joined)
+            if "sphere" in comp:
+                sanitizedSphere = sanitize_sphere(comp)
+                desc = desc.replace(comp, sanitizedSphere)
+            else:
+                joined = "".join(comp.split("_"))
+                desc = desc.replace(comp, joined)
     return desc
 
 
 # ============================================
-#         undo_string_compression
+#              sanitize_sphere
+# ============================================
+def sanitize_sphere(comp):
+    sanitized = "('sphere', ("
+    if "max" in comp:
+        sanitized += "'max', ("
+    elif "c" in comp:
+        sanitized += "'c', ("
+    if "0_1" in comp:
+        sanitized += "0.1, 'unitary')))"
+    elif "0_3" in comp:
+        sanitized += "0.3, 'unitary')))"
+    return sanitized
+
+
+# ============================================
+#           undo_string_compression
 # ============================================
 def undo_string_compression(params, frontend):
+    # Don't need to undo the dobj joining since the joined version
+    # should already match the pytest version
     for comp in dsRegister[frontend]:
         joined = "".join(comp.split("_"))
         if joined == params["ds"]:
             params["ds"] = comp
     for comp in fieldRegister[frontend]:
         joined = "".join(comp.split("_"))
-        if joined == params["field"]:
-            params["field"] = comp
-    for comp in objRegister[frontend]:
-        joined = "".join(comp.split("_"))
-        if joined == params["dobj"]:
-            params["dobj"] = comp
+        # Use in and replace here because the field can be a tuple
+        if joined in params["field"]:
+            params["field"] = params["field"].replace(joined, comp)
     return params
 
 # ============================================
