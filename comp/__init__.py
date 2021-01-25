@@ -4,5 +4,6 @@ from . import (
     data,
     match,
     parse,
+    registers,
     run,
 )
