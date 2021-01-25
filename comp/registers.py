@@ -1,6 +1,9 @@
 # Dataset register. Contains the datasets whose names have underscores
 # in them, organized by frontend
 dsRegister = {
+    "ahf" : [
+        "snap_N64L16_135.parameter",
+    ],
     "tipsy" : [
         "halo1e11_run1_00400",
         "agora_1e11_00400",
@@ -11,6 +14,12 @@ dsRegister = {
 # Field register. Contains the fields whose names have underscores in
 # them, organized by frontend
 fieldRegister = {
+    "ahf" : [
+        "particle_position_x",
+        "particle_position_y",
+        "particle_position_z",
+        "particle_mass",
+    ],
     "enzo" : [
         "velocity_magnitude",
         "velocity_divergence",
