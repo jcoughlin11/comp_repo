@@ -1,4 +1,5 @@
 import argparse
+import os
 import shelve
 
 from progress.bar import Bar
@@ -17,12 +18,13 @@ def run():
     The nose results are saved in a shelve file. The pytest results
     are saved in an hdf5 file.
         1. Loop over each test in the shelve file
-        2. For each test, find the corresponding test in the h5 file
+        2. Find the corresponding test in the h5 file
         3. Compare
     """
     frontend = parse_args()
-    noseFile = f"{frontend}/local-{frontend}/local-{frontend}"
-    noseFile = "/home/latitude/data/yt_data/answers/" + noseFile
+    path = "/home/latitude/data/yt_data/answers/frontends"
+    fname = f"{frontend}/local-{frontend}/local-{frontend}"
+    noseFile = os.path.join(path, fname)
     progBar = get_prog_bar(noseFile)
     with shelve.open(noseFile, "r") as yfd:
         # The yt shelve file is keyed by ds then test description
@@ -41,7 +43,7 @@ def run():
                 try:
                     compare_answers(ytData, myData, ytParsedDesc["test"])
                 except:
-                    errorFile = "/home/latitude/data/yt_data/answers/"
+                    errorFile = "/home/latitude/data/yt_data/answers/frontends/"
                     errorFile += f"{frontend}/{frontend}_failures.txt"
                     with open(errorFile, "a") as ffd:
                         ffd.write(ytDesc + "\t" + myDesc + "\n")
