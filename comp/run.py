@@ -21,12 +21,15 @@ def run():
         2. Find the corresponding test in the h5 file
         3. Compare
     """
-    #import pdb; pdb.set_trace()
-    frontend = parse_args()
+    clArgs = parse_args()
+    frontend = clArgs.frontend
+    debug = clArgs.pdb
     path = "/home/latitude/data/yt_data/answers/frontends"
     fname = f"{frontend}/local-{frontend}/local-{frontend}"
     noseFile = os.path.join(path, fname)
     progBar = get_prog_bar(noseFile)
+    if debug:
+        import pdb; pdb.set_trace()
     with shelve.open(noseFile, "r") as yfd:
         # The yt shelve file is keyed by ds then test description
         for ds in yfd.keys():
@@ -61,8 +64,14 @@ def parse_args():
         "frontend",
         help="The name of the frontend to compare tests for.",
     )
+    parser.add_argument(
+        "--pdb",
+        dest = "pdb",
+        action = "store_true",
+        help = "Use debugger,",
+    )
     clArgs = parser.parse_args()
-    return clArgs.frontend
+    return clArgs
 
 
 # ============================================
