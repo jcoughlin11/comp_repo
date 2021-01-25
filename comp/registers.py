@@ -1,8 +1,15 @@
+dotRegister = {
+    "snap_N64L16_135_parameter" : "snap_N64L16_135.parameter",
+}
+
+
 # Dataset register. Contains the datasets whose names have underscores
-# in them, organized by frontend
+# in them, organized by frontend. This is how they appear in the
+# description. The actual version (if there are dots), are given above
+# in dotRegister
 dsRegister = {
     "ahf" : [
-        "snap_N64L16_135.parameter",
+        "snap_N64L16_135_parameter",
     ],
     "tipsy" : [
         "halo1e11_run1_00400",
@@ -45,4 +52,5 @@ objRegister = {
     "tipsy" : [
         "sphere_('c', (0_3, 'unitary'))",
         "sphere_('c', (0_1, 'unitary'))",
+    ],
 }

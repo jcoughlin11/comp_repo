@@ -1,5 +1,6 @@
 import re
 
+from .registers import dotRegister
 from .registers import dsRegister
 from .registers import fieldRegister
 from .registers import objRegister
@@ -17,6 +18,7 @@ def parse_yt_desc(desc, frontend):
         4. other test parameters
     These are separated by underscores.
     """
+    params = {}
     # Remove underscores from the names of the various components
     components = sanitize_yt_desc(desc, frontend)
     params["test"] = camel_to_snake(components[0])
@@ -53,11 +55,20 @@ def sanitize_yt_desc(desc, frontend):
 # ============================================
 def sanitize_component(desc, componentType, frontend):
     if componentType == "ds":
-        register = dsRegister[frontend]
+        try:
+            register = dsRegister[frontend]
+        except KeyError:
+            return desc
     elif componentType == "field":
-        register = fieldRegister[frontend]
+        try:
+            register = fieldRegister[frontend]
+        except KeyError:
+            return desc
     elif componentType == "object":
-        register = objRegister[frontend]
+        try:
+            register = objRegister[frontend]
+        except KeyError:
+            return desc
     for comp in register:
         if comp in desc:
             if "sphere" in comp:
@@ -86,24 +97,29 @@ def sanitize_sphere(comp):
 
 
 # ============================================
-#           undo_string_compression
+#          undo_string_compressions
 # ============================================
-def undo_string_compression(params, frontend):
+def undo_string_compressions(params, frontend):
     # Don't need to undo the dobj joining since the joined version
     # should already match the pytest version
     for comp in dsRegister[frontend]:
         joined = "".join(comp.split("_"))
         if joined == params["ds"]:
-            params["ds"] = comp
+            # There are certain names with dots in them
+            if comp in dotRegister:
+                params["ds"] = dotRegister[comp]
+            else:
+                params["ds"] = comp
     for comp in fieldRegister[frontend]:
         joined = "".join(comp.split("_"))
         # Use in and replace here because the field can be a tuple
-        if joined in params["field"]:
-            params["field"] = params["field"].replace(joined, comp)
+        if "f" in params:
+            if joined in params["f"]:
+                params["f"] = params["f"].replace(joined, comp)
     return params
 
 # ============================================
-#                snake_to_camel
+#                camel_to_snake 
 # ============================================
 def camel_to_snake(camel):
     """

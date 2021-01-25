@@ -11,7 +11,7 @@ def get_my_data(desc, test, frontend):
     # erroneous groups
     myData = None
     desc = desc.replace("/", "_")
-    hf = "/home/latitude/data/yt_data/answers/"
+    hf = "/home/latitude/data/yt_data/answers/frontends/"
     hf += f"{frontend}/{frontend}_answers_raw_000.h5"
     with h5py.File(hf, "r") as fd:
         data = fd[desc][test]

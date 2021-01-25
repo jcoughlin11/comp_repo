@@ -21,6 +21,7 @@ def run():
         2. Find the corresponding test in the h5 file
         3. Compare
     """
+    #import pdb; pdb.set_trace()
     frontend = parse_args()
     path = "/home/latitude/data/yt_data/answers/frontends"
     fname = f"{frontend}/local-{frontend}/local-{frontend}"
