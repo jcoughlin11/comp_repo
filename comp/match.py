@@ -65,12 +65,29 @@ def convert_pytest_params(params, ytParams):
     # field is a tuple (for example, for f = ('nbody', 'particle_position_x')
     # in ahf, nose stores it as "particle_position_x" while pytest uses
     # "('nbody', 'particle_position_x')")
+
+    # A second complication is the "in" keyword below. It works for the
+    # tuple issue mentioned above, but there is another issue. For example,
+    # in amrvac, there is the "energy_density" and the "magnetic_energy_density"
+    # fields. pytest stores them as tuples, which is what triggers the
+    # AssertionError, but then we hit the "in" condition which will be True
+    # despite the two descriptions being different. This sets the "f" param equal
+    # to the nose value. For the grid_values test, this results in convParams and
+    # ytParams being equal despite the fact that convParams is for the magnetic
+    # energy density, not the energy density. The data are obviously different, so
+    # the test is marked as a failure when, in fact, we were comparing apples and
+    # oranges.
     if "f" in convParams:
         try:
             assert convParams["f"] == ytParams["f"]
         except AssertionError:
-            if ytParams["f"] in convParams["f"]:
-                convParams["f"] = ytParams["f"]
+            baseField = get_base_field(convParams["f"])
+            # if ytParams["f"] in convParams["f"]:
+            if baseField is not None:
+                if ytParams["f"] == baseField:
+                    convParams["f"] = ytParams["f"]
+                else:
+                    return None
             else:
                 return None
     # As a last check, if d was in params but happens to be None, we
@@ -78,3 +95,24 @@ def convert_pytest_params(params, ytParams):
     if convParams["d"] == "None":
         convParams["d"] = "all"
     return convParams
+
+
+# ============================================
+#                get_base_field
+# ============================================
+def get_base_field(field):
+    """
+    In the case that field is saved as a tuple in pytest but not in
+    nose, this function extracts the field name from the tuple. For
+    example: if f = "('gas', 'magnetic_energy_density')", then the
+    result of this function is 'magnetic_energy_density'.
+    """
+    try:
+        assert "(" in field and ")" in field
+    except AssertionError:
+        return None
+    baseField = field.split(",")[-1]
+    baseField = baseField.strip(")")
+    baseField = baseField.strip()
+    baseField = baseField.strip("'")
+    return baseField
