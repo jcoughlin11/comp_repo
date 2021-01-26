@@ -37,6 +37,8 @@ def run():
                 # Parse the yt description so it can be compared to the
                 # pytest description
                 ytParsedDesc = parse_yt_desc(ytDesc, frontend)
+                if "ds" in ytParsedDesc:
+                    ytParsedDesc["ds"] = ds
                 # Find the matching pytest description
                 myDesc = find_match(ytParsedDesc, frontend)
                 # Load the yt data
