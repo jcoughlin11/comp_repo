@@ -1,6 +1,5 @@
 import re
 
-from .registers import dotRegister
 from .registers import dsRegister
 from .registers import fieldRegister
 from .registers import objRegister
@@ -101,15 +100,12 @@ def sanitize_sphere(comp):
 # ============================================
 def undo_string_compressions(params, frontend):
     # Don't need to undo the dobj joining since the joined version
-    # should already match the pytest version
-    for comp in dsRegister[frontend]:
-        joined = "".join(comp.split("_"))
-        if joined == params["ds"]:
-            # There are certain names with dots in them
-            if comp in dotRegister:
-                params["ds"] = dotRegister[comp]
-            else:
-                params["ds"] = comp
+    # should already match the pytest version.
+    # NOTE: Get ds from the key in the shelve file
+    try:
+        reg = fieldRegister[frontend]
+    except KeyError:
+        return params
     for comp in fieldRegister[frontend]:
         joined = "".join(comp.split("_"))
         # Use in and replace here because the field can be a tuple
