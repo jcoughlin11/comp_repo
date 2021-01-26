@@ -1,16 +1,21 @@
-dotRegister = {
-    "snap_N64L16_135_parameter" : "snap_N64L16_135.parameter",
-}
-
-
 # Dataset register. Contains the datasets whose names have underscores
 # in them, organized by frontend. This is how they appear in the
-# description. The actual version (if there are dots), are given above
-# in dotRegister
+# description (so dots are underscores)
 dsRegister = {
     "ahf" : [
         "snap_N64L16_135_parameter",
     ],
+    "amrvac" : [
+        "bw_2d0000_dat",
+        "kh_2d0000_dat",
+        "kh_3D0000_dat",
+        "Jet0003_dat",
+        "R_1d0005_dat",
+        "bw_3d0000_dat",
+        "bw_polar_2D0000_dat",
+        "bw_cylindrical_3D0000_dat",
+        "RM2D_dust_Kwok0000_dat",
+    ], 
     "tipsy" : [
         "halo1e11_run1_00400",
         "agora_1e11_00400",
@@ -26,6 +31,11 @@ fieldRegister = {
         "particle_position_y",
         "particle_position_z",
         "particle_mass",
+    ],
+    "amrvac" : [
+        "velocity_magnitude",
+        "magnetic_energy_density",
+        "energy_density",
     ],
     "enzo" : [
         "velocity_magnitude",
@@ -46,6 +56,9 @@ fieldRegister = {
 # Object register. Contains the objects whose names have underscores
 # in them, organized by frontend
 objRegister = {
+    "amrvac" : [
+        "sphere_('max', (0_1, 'unitary'))",
+    ],
     "enzo" : [
         "sphere_('max', (0_1, 'unitary'))",
     ],
