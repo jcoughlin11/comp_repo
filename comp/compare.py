@@ -21,6 +21,13 @@ def compare_answers(ytData, myData, test):
     elif isinstance(myData, np.float):
         np.testing.assert_array_equal(ytData, myData)
         didComp = True
+    elif isinstance(myData, np.int64):
+        # pytest uses -1 to represent None values in order to make
+        # hashing and saving to hdf5 work
+        if ytData is None:
+            ytData = np.int64(-1)
+        np.testing.assert_array_equal(ytData, myData)
+        didComp = True
     elif isinstance(myData, dict):
         comp_dict(ytData, myData)
         didComp = True
