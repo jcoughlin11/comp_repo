@@ -8,6 +8,7 @@ from .compare import compare_answers
 from .data import get_my_data
 from .match import find_match
 from .parse import parse_yt_desc
+from .registers import testRegister
 
 
 # ============================================
@@ -40,6 +41,17 @@ def run():
                 ytParsedDesc = parse_yt_desc(ytDesc, frontend)
                 if "ds" in ytParsedDesc:
                     ytParsedDesc["ds"] = ds
+                try:
+                    assert ytParsedDesc["test"] in testRegister
+                except AssertionError:
+                    errorFile = "/home/latitude/data/yt_data/answers/frontends/"
+                    errorFile += f"{frontend}/{frontend}_failures.txt"
+                    with open(errorFile, "a") as ffd:
+                        ffd.write(f"NOT IMPLEMENTED: {ytParsedDesc['test']}\n")
+                    progBar.next()
+                    if debug:
+                        i += 1
+                    continue
                 # Find the matching pytest description
                 myDesc = find_match(ytParsedDesc, frontend)
                 # Load the yt data

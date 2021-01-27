@@ -1,3 +1,14 @@
+testRegister = [
+    "grid_hierarchy",
+    "parentage_relationships",
+    "grid_values",
+    "projection_values",
+    "field_values",
+    "pixelized_projection_values",
+    "pixelized_particle_projection_values",
+]
+
+
 # Dataset register. Contains the datasets whose names have underscores
 # in them, organized by frontend. This is how they appear in the
 # description (so dots are underscores)
@@ -16,6 +27,9 @@ dsRegister = {
         "bw_cylindrical_3D0000_dat",
         "RM2D_dust_Kwok0000_dat",
     ], 
+    "artio" : [
+        "sizmbhloz-clref04SNth-rs9_a0_9011_art",
+    ],
     "tipsy" : [
         "halo1e11_run1_00400",
         "agora_1e11_00400",
@@ -37,6 +51,11 @@ fieldRegister = {
         "magnetic_energy_density",
         "energy_density",
     ],
+    "artio" : [
+        "velocity_magnitude",
+        "('deposit', 'all_density')",
+        "('deposit', 'all_count')",
+    ],
     "enzo" : [
         "velocity_magnitude",
         "velocity_divergence",
@@ -57,6 +76,9 @@ fieldRegister = {
 # in them, organized by frontend
 objRegister = {
     "amrvac" : [
+        "sphere_('max', (0_1, 'unitary'))",
+    ],
+    "artio" : [
         "sphere_('max', (0_1, 'unitary'))",
     ],
     "enzo" : [
