@@ -67,9 +67,21 @@ def run():
                 # Now compare the results
                 try:
                     compare_answers(ytData, myData, ytParsedDesc["test"])
-                except:
+                except AssertionError:
                     error = True
                     msg = f"RESULTS UNEQUAL: {ytDesc}\t{myDesc}\n"
+                    continue
+                except ValueError:
+                    error = True
+                    msg = f"TESTS NOT COMPARED: {ytDesc}\t{myDesc}\n"
+                    continue
+                except KeyError:
+                    error = True
+                    msg = f"KEYERROR: {ytDesc}\t{myDesc}\n"
+                    continue
+                except:
+                    error = True
+                    msg = f"UNHANDLED EXCEPTION: {ytDesc}\t{myDesc}\n"
                     continue
     progBar.finish()
 

@@ -7,17 +7,25 @@ import numpy as np
 #               compare_answers
 # ============================================
 def compare_answers(ytData, myData, test):
+    didComp = False
     # Some tests need special treatment
     if test == "grid_values":
         compare_gv(ytData, myData)
+        didComp = True
     elif test == "parentage_relationships":
         compare_pr(ytData, myData)
+        didComp = True
     elif isinstance(myData, np.ndarray):
         comp_arrays(ytData, myData)
+        didComp = True
     elif isinstance(myData, np.float):
         np.testing.assert_array_equal(ytData, myData)
+        didComp = True
     elif isinstance(myData, dict):
         comp_dict(ytData, myData)
+        didComp = True
+    if not didComp:
+        raise ValueError
 
 
 # ============================================
@@ -48,6 +56,8 @@ def comp_dict(ytData, myData):
             # It's possible there are nans, which causes the comparison
             # to fail even though the arrays are actually the same
             check_for_nans(value, myData[key])
+    if len(ytData) == 0:
+        assert len(myData) == 0
 
 
 # ============================================
@@ -78,6 +88,8 @@ def compare_gv(ytData, myData):
         myValue = myData[str(key)]
         myValue = hashlib.md5(myValue.tostring()).hexdigest()
         assert value == myValue
+    if len(ytData) == 0:
+        assert len(myData) == 0
 
 
 # ============================================
