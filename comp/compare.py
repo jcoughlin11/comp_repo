@@ -7,33 +7,47 @@ import numpy as np
 #               compare_answers
 # ============================================
 def compare_answers(ytData, myData, test):
-    if isinstance(myData, np.ndarray):
-        try:
-            np.testing.assert_array_equal(ytData, myData)
-        except:
-            # It's possible there are nans, which causes the comparison
-            # to fail even though the arrays are actually the same
-            check_for_nans(ytData, myData)
+    # Some tests need special treatment
+    if test == "grid_values":
+        compare_gv(ytData, myData)
+    elif test == "parentage_relationships":
+        compare_pr(ytData, myData)
+    elif isinstance(myData, np.ndarray):
+        comp_arrays(ytData, myData)
     elif isinstance(myData, np.float):
         np.testing.assert_array_equal(ytData, myData)
     elif isinstance(myData, dict):
-        if test == "grid_values":
-            compare_gv(ytData, myData)
-        elif test == "parentage_relationships":
-            compare_pr(ytData, myData)
-        else:
-            for key, value in ytData.items():
-                try:
-                    np.testing.assert_array_equal(value, myData[key])
-                # For some fields (e.g., ('enzo', 'Density')) the yt key
-                # is a tuple while the pytest key is a str version of that
-                # tuple
-                except KeyError:
-                    np.testing.assert_array_equal(value, myData[str(key)])
-                except AssertionError:
-                    # It's possible there are nans, which causes the comparison
-                    # to fail even though the arrays are actually the same
-                    check_for_nans(value, myData[key])
+        comp_dict(ytData, myData)
+
+
+# ============================================
+#                comp_arrays
+# ============================================
+def comp_arrays(ytData, myData):
+    try:
+        np.testing.assert_array_equal(ytData, myData)
+    except:
+        # It's possible there are nans, which causes the comparison
+        # to fail even though the arrays are actually the same
+        check_for_nans(ytData, myData)
+
+
+# ============================================
+#                 comp_dict
+# ============================================
+def comp_dict(ytData, myData):
+    for key, value in ytData.items():
+        try:
+            np.testing.assert_array_equal(value, myData[key])
+        # For some fields (e.g., ('enzo', 'Density')) the yt key
+        # is a tuple while the pytest key is a str version of that
+        # tuple
+        except KeyError:
+            np.testing.assert_array_equal(value, myData[str(key)])
+        except AssertionError:
+            # It's possible there are nans, which causes the comparison
+            # to fail even though the arrays are actually the same
+            check_for_nans(value, myData[key])
 
 
 # ============================================

@@ -31,11 +31,17 @@ def run():
     progBar = get_prog_bar(noseFile)
     if debug:
         import pdb; pdb.set_trace()
-        i = 0
+    error = False
+    msg = ""
     with shelve.open(noseFile, "r") as yfd:
         # The yt shelve file is keyed by ds then test description
         for ds in yfd.keys():
             for ytDesc in yfd[ds].keys():
+                progBar.next()
+                if error:
+                    write_error(msg, frontend)
+                    msg = ""
+                    error = False
                 # Parse the yt description so it can be compared to the
                 # pytest description
                 ytParsedDesc = parse_yt_desc(ytDesc, frontend)
@@ -44,13 +50,8 @@ def run():
                 try:
                     assert ytParsedDesc["test"] in testRegister
                 except AssertionError:
-                    errorFile = "/home/latitude/data/yt_data/answers/frontends/"
-                    errorFile += f"{frontend}/{frontend}_failures.txt"
-                    with open(errorFile, "a") as ffd:
-                        ffd.write(f"NOT IMPLEMENTED: {ytParsedDesc['test']}\n")
-                    progBar.next()
-                    if debug:
-                        i += 1
+                    error = True
+                    msg = f"NOT IMPLEMENTED: {ytParsedDesc['test']}\n"
                     continue
                 # Find the matching pytest description
                 myDesc = find_match(ytParsedDesc, frontend)
@@ -60,25 +61,16 @@ def run():
                 try:
                     myData = get_my_data(myDesc, ytParsedDesc["test"], frontend)
                 except KeyError:
-                    errorFile = "/home/latitude/data/yt_data/answers/frontends/"
-                    errorFile += f"{frontend}/{frontend}_failures.txt"
-                    with open(errorFile, "a") as ffd:
-                        ffd.write(ytDesc + "\t" + myDesc + "\n")
-                    progBar.next()
-                    if debug:
-                        i += 1
+                    error = True
+                    msg = f"PYTEST KEYERROR: {ytDesc}\t{myDesc}\n"
                     continue
                 # Now compare the results
                 try:
                     compare_answers(ytData, myData, ytParsedDesc["test"])
                 except:
-                    errorFile = "/home/latitude/data/yt_data/answers/frontends/"
-                    errorFile += f"{frontend}/{frontend}_failures.txt"
-                    with open(errorFile, "a") as ffd:
-                        ffd.write(ytDesc + "\t" + myDesc + "\n")
-                progBar.next()
-                if debug:
-                    i += 1
+                    error = True
+                    msg = f"RESULTS UNEQUAL: {ytDesc}\t{myDesc}\n"
+                    continue
     progBar.finish()
 
 
@@ -119,3 +111,13 @@ def get_n_tests(noseFile):
         for ds in fd.keys():
             ntests += len(fd[ds].keys())
     return ntests
+
+
+# ============================================
+#                 write_error
+# ============================================
+def write_error(msg, frontend):
+    errorFile = "/home/latitude/data/yt_data/answers/frontends/"
+    errorFile += f"{frontend}/{frontend}_failures.txt"
+    with open(errorFile, "a") as ffd:
+        ffd.write(msg)
