@@ -30,6 +30,11 @@ dsRegister = {
     "artio" : [
         "sizmbhloz-clref04SNth-rs9_a0_9011_art",
     ],
+    "athena" : [
+        "Cloud_0050",
+        "Blast_0100",
+        "rps_0062",
+    ],
     "tipsy" : [
         "halo1e11_run1_00400",
         "agora_1e11_00400",
@@ -56,6 +61,12 @@ fieldRegister = {
         "('deposit', 'all_density')",
         "('deposit', 'all_count')",
     ],
+    "athena" : [
+        "scalar[0]",
+        "total_energy",
+        "velocity_magnitude",
+        "specific_scalar[0]",
+    ],
     "enzo" : [
         "velocity_magnitude",
         "velocity_divergence",
@@ -79,6 +90,9 @@ objRegister = {
         "sphere_('max', (0_1, 'unitary'))",
     ],
     "artio" : [
+        "sphere_('max', (0_1, 'unitary'))",
+    ],
+    "athena" : [
         "sphere_('max', (0_1, 'unitary'))",
     ],
     "enzo" : [
