@@ -1,13 +1,20 @@
 import hashlib
 
 import numpy as np
+import unyt
+
+from .registers import specialFields
 
 
 # ============================================
 #               compare_answers
 # ============================================
-def compare_answers(ytData, myData, test):
+def compare_answers(ytData, myData, test, frontend):
     didComp = False
+    if isinstance(ytData, list):
+        ytData = unyt.array.unyt_array(ytData)
+    if isinstance(ytData, unyt.array.unyt_array):
+        ytData = ytData.d
     # Some tests need special treatment
     if test == "grid_values":
         compare_gv(ytData, myData)
@@ -29,7 +36,7 @@ def compare_answers(ytData, myData, test):
         np.testing.assert_array_equal(ytData, myData)
         didComp = True
     elif isinstance(myData, dict):
-        comp_dict(ytData, myData)
+        comp_dict(ytData, myData, frontend)
         didComp = True
     if not didComp:
         raise ValueError
@@ -50,9 +57,17 @@ def comp_arrays(ytData, myData):
 # ============================================
 #                 comp_dict
 # ============================================
-def comp_dict(ytData, myData):
+def comp_dict(ytData, myData, frontend):
     for key, value in ytData.items():
+        if isinstance(value, unyt.array.unyt_array):
+            value = value.d
         try:
+            # For some frontends (e.g., athena), nose uses an alias
+            # for certain fields (e.g., ('gas', 'density') for
+            # ('athena', 'density')). Need to convert in order to avoid
+            # a KeyError
+            if frontend in specialFields and key in specialFields[frontend]:
+                key = specialFields[frontend][key]
             np.testing.assert_array_equal(value, myData[key])
         # For some fields (e.g., ('enzo', 'Density')) the yt key
         # is a tuple while the pytest key is a str version of that

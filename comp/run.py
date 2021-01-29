@@ -66,7 +66,7 @@ def run():
                     continue
                 # Now compare the results
                 try:
-                    compare_answers(ytData, myData, ytParsedDesc["test"])
+                    compare_answers(ytData, myData, ytParsedDesc["test"], frontend)
                 except AssertionError:
                     error = True
                     msg = f"RESULTS UNEQUAL: {ytDesc}\t{myDesc}\n"

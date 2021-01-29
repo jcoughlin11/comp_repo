@@ -103,3 +103,14 @@ objRegister = {
         "sphere_('c', (0_1, 'unitary'))",
     ],
 }
+
+
+# For some frontends, nose uses an alias for certain fields. This
+# causes a KeyError in comp_dict, so this register serves as a map
+# between them
+specialFields = {
+    "athena" : {
+        ('gas', 'density') : "('athena', 'density')",
+        ('gas', 'total_energy') : "('athena', 'total_energy')",
+    },
+}
