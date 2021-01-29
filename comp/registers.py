@@ -35,6 +35,10 @@ dsRegister = {
         "Blast_0100",
         "rps_0062",
     ],
+    "athena_pp" : [
+        "disk_out1_00000",
+        "AM06_out1_00400",
+    ],
     "tipsy" : [
         "halo1e11_run1_00400",
         "agora_1e11_00400",
@@ -67,6 +71,10 @@ fieldRegister = {
         "velocity_magnitude",
         "specific_scalar[0]",
     ],
+    "athena_pp" : [
+        "velocity_magnitude",
+        "magnetic_field_x",
+    ],
     "enzo" : [
         "velocity_magnitude",
         "velocity_divergence",
@@ -93,6 +101,9 @@ objRegister = {
         "sphere_('max', (0_1, 'unitary'))",
     ],
     "athena" : [
+        "sphere_('max', (0_1, 'unitary'))",
+    ],
+    "athena_pp" : [
         "sphere_('max', (0_1, 'unitary'))",
     ],
     "enzo" : [
