@@ -46,6 +46,9 @@ dsRegister = {
         "plt32_2d_hdf5",
         "data_0004_hdf5",
     ],
+    "enzo_p" : [
+        "ENZOP_DD0140",
+    ],
     "tipsy" : [
         "halo1e11_run1_00400",
         "agora_1e11_00400",
@@ -90,6 +93,17 @@ fieldRegister = {
         "velocity_magnitude",
         "velocity_divergence",
     ],
+    "enzo_p" : [
+        "total_energy",
+        "particle_position_x",
+        "particle_position_y",
+        "particle_position_z",
+        "particle_velocity_x",
+        "particle_velocity_y",
+        "particle_velocity_z",
+        "velocity_x",
+        "velocity_y",
+    ],
     "tipsy" : [
         "particle_mass",
         "particle_velocity_x",
@@ -122,6 +136,10 @@ objRegister = {
         "sphere_('c', (0_1, 'unitary'))",
     ],
     "enzo" : [
+        "sphere_('max', (0_1, 'unitary'))",
+    ],
+    "enzo_p" : [
+        "sphere_('max', (0_25, 'unitary'))",
         "sphere_('max', (0_1, 'unitary'))",
     ],
     "tipsy" : [
