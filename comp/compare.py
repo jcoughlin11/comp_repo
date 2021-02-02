@@ -13,7 +13,7 @@ def compare_answers(ytData, myData, test, frontend):
     didComp = False
     if isinstance(ytData, list):
         ytData = unyt.array.unyt_array(ytData)
-    if isinstance(ytData, unyt.array.unyt_array):
+    if hasattr(ytData, "d"):
         ytData = ytData.d
     # Some tests need special treatment
     if test == "grid_values":
@@ -59,7 +59,7 @@ def comp_arrays(ytData, myData):
 # ============================================
 def comp_dict(ytData, myData, frontend):
     for key, value in ytData.items():
-        if isinstance(value, unyt.array.unyt_array):
+        if hasattr(value, "d"):
             value = value.d
         try:
             # For some frontends (e.g., athena), nose uses an alias
