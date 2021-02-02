@@ -142,4 +142,8 @@ def get_other_yt_params(testName, otherComponents):
         otherParams["f"] = otherComponents[0]
         otherParams["a"] = otherComponents[1]
         otherParams["w"] = otherComponents[2]
+    elif testName in ["generic_array",]:
+        otherParams["func_name"] = otherComponents[0]
+        otherParams["args"] = otherComponents[1]
+        otherParams["kwargs"] = otherComponents[2]
     return otherParams
