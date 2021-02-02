@@ -39,6 +39,13 @@ dsRegister = {
         "disk_out1_00000",
         "AM06_out1_00400",
     ],
+    "chombo" : [
+        "data_0077_3d_hdf5",
+        "data_0005_3d_hdf5",
+        "data_0000_3d_hdf5",
+        "plt32_2d_hdf5",
+        "data_0004_hdf5",
+    ],
     "tipsy" : [
         "halo1e11_run1_00400",
         "agora_1e11_00400",
@@ -75,6 +82,10 @@ fieldRegister = {
         "velocity_magnitude",
         "magnetic_field_x",
     ],
+    "chombo" : [
+        "velocity_magnitude",
+        "magnetic_field_x",
+    ],
     "enzo" : [
         "velocity_magnitude",
         "velocity_divergence",
@@ -105,6 +116,10 @@ objRegister = {
     ],
     "athena_pp" : [
         "sphere_('max', (0_1, 'unitary'))",
+    ],
+    "chombo" : [
+        "sphere_('max', (0_1, 'unitary'))",
+        "sphere_('c', (0_1, 'unitary'))",
     ],
     "enzo" : [
         "sphere_('max', (0_1, 'unitary'))",
