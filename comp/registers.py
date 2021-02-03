@@ -49,6 +49,11 @@ dsRegister = {
     "enzo_p" : [
         "ENZOP_DD0140",
     ],
+    "fits" : [
+        "grs-50-cube_fits",
+        "velocity_field_20_fits",
+        "A2052_merged_0_3-2_match-core_tmap_bgecorr_fits",
+    ],
     "tipsy" : [
         "halo1e11_run1_00400",
         "agora_1e11_00400",
@@ -104,6 +109,13 @@ fieldRegister = {
         "velocity_x",
         "velocity_y",
     ],
+    "fits" : [
+        "velocity_x",
+        "velocity_y",
+        "velocity_z",
+        "counts_0.1-2.0",
+        "counts_2.0-5.0",
+    ],
     "tipsy" : [
         "particle_mass",
         "particle_velocity_x",
@@ -141,6 +153,9 @@ objRegister = {
     "enzo_p" : [
         "sphere_('max', (0_25, 'unitary'))",
         "sphere_('max', (0_1, 'unitary'))",
+    ],
+    "fits" : [
+        "sphere_('c', (0_1, 'unitary'))",
     ],
     "tipsy" : [
         "sphere_('c', (0_3, 'unitary'))",
