@@ -54,6 +54,11 @@ dsRegister = {
         "velocity_field_20_fits",
         "A2052_merged_0_3-2_match-core_tmap_bgecorr_fits",
     ],
+    "flash" : [
+        "sloshing_low_res_hdf5_plt_cnt_0300",
+        "windtunnel_4lev_hdf5_plt_cnt_0030",
+        "fiducial_1to3_b1_hdf5_part_0080",
+    ],
     "tipsy" : [
         "halo1e11_run1_00400",
         "agora_1e11_00400",
@@ -116,6 +121,9 @@ fieldRegister = {
         "counts_0.1-2.0",
         "counts_2.0-5.0",
     ],
+    "flash" : [
+        "velocity_magnitude",
+    ],
     "tipsy" : [
         "particle_mass",
         "particle_velocity_x",
@@ -156,6 +164,9 @@ objRegister = {
     ],
     "fits" : [
         "sphere_('c', (0_1, 'unitary'))",
+    ],
+    "flash" : [
+        "sphere_('max', (0_1, 'unitary'))",
     ],
     "tipsy" : [
         "sphere_('c', (0_3, 'unitary'))",
