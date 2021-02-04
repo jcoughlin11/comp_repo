@@ -94,6 +94,8 @@ def sanitize_sphere(comp):
         sanitized += "0.3, 'unitary')))"
     elif "0_25" in comp:
         sanitized += "0.25, 'unitary')))"
+    elif "0_2" in comp:
+        sanitized += "0.2, 'unitary')))"
     return sanitized
 
 

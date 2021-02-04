@@ -166,6 +166,9 @@ fieldRegister = {
         "('gas', 'O_metallicity')",
         "('gas', 'velocity_magnitude')",
     ],
+    "moab" : [
+        "('moab', 'flux')",
+    ],
     "tipsy" : [
         "particle_mass",
         "particle_velocity_x",
@@ -221,6 +224,10 @@ objRegister = {
     ],
     "gizmo" : [
         "sphere_('c', (0_1, 'unitary'))",
+    ],
+    "moab" : [
+        "sphere_('c', (0_1, 'unitary'))",
+        "sphere_('c', (0_2, 'unitary'))",
     ],
     "tipsy" : [
         "sphere_('c', (0_3, 'unitary'))",
