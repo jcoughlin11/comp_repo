@@ -72,6 +72,9 @@ dsRegister = {
         "plummer_000000",
         "Data_000018",
     ],
+    "gdf" : [
+        "sedov_tst_0004",
+    ],
     "tipsy" : [
         "halo1e11_run1_00400",
         "agora_1e11_00400",
@@ -150,6 +153,9 @@ fieldRegister = {
         "('gamer', 'CCMagY')",
         "('gas', 'magnetic_energy')",
     ],
+    "gdf" : [
+        "velocity_x",
+    ],
     "tipsy" : [
         "particle_mass",
         "particle_velocity_x",
@@ -198,6 +204,9 @@ objRegister = {
         "sphere_('c', (0_1, 'unitary'))",
     ],
     "gamer" : [
+        "sphere_('max', (0_1, 'unitary'))",
+    ],
+    "gdf" : [
         "sphere_('max', (0_1, 'unitary'))",
     ],
     "tipsy" : [
