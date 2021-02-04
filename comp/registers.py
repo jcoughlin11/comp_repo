@@ -75,6 +75,9 @@ dsRegister = {
     "gdf" : [
         "sedov_tst_0004",
     ],
+    "gizmo" : [
+        "snap_N64L16_135",
+    ],
     "tipsy" : [
         "halo1e11_run1_00400",
         "agora_1e11_00400",
@@ -156,6 +159,13 @@ fieldRegister = {
     "gdf" : [
         "velocity_x",
     ],
+    "gizmo" : [
+        "('gas', 'density')",
+        "('gas', 'temperature')",
+        "('gas', 'metallicity')",
+        "('gas', 'O_metallicity')",
+        "('gas', 'velocity_magnitude')",
+    ],
     "tipsy" : [
         "particle_mass",
         "particle_velocity_x",
@@ -208,6 +218,9 @@ objRegister = {
     ],
     "gdf" : [
         "sphere_('max', (0_1, 'unitary'))",
+    ],
+    "gizmo" : [
+        "sphere_('c', (0_1, 'unitary'))",
     ],
     "tipsy" : [
         "sphere_('c', (0_3, 'unitary'))",
