@@ -62,6 +62,10 @@ dsRegister = {
     "gadget" : [
         "snap_505",
     ],
+    "gadget_fof" : [
+        "fof_subhalo_tab_005",
+        "fof_subhalo_tab_042",
+    ],
     "tipsy" : [
         "halo1e11_run1_00400",
         "agora_1e11_00400",
