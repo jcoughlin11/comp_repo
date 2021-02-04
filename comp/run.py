@@ -31,17 +31,11 @@ def run():
     progBar = get_prog_bar(noseFile)
     if debug:
         import pdb; pdb.set_trace()
-    error = False
-    msg = ""
     with shelve.open(noseFile, "r") as yfd:
         # The yt shelve file is keyed by ds then test description
         for ds in yfd.keys():
             for ytDesc in yfd[ds].keys():
                 progBar.next()
-                if error:
-                    write_error(msg, frontend)
-                    msg = ""
-                    error = False
                 # Parse the yt description so it can be compared to the
                 # pytest description
                 ytParsedDesc = parse_yt_desc(ytDesc, frontend)
@@ -50,9 +44,8 @@ def run():
                 try:
                     assert ytParsedDesc["test"] in testRegister
                 except AssertionError:
-                    error = True
                     msg = f"NOT IMPLEMENTED: {ytParsedDesc['test']}\n"
-                    continue
+                    write_error(msg, frontend)
                 # Find the matching pytest description
                 myDesc = find_match(ytParsedDesc, frontend)
                 # Load the yt data
@@ -61,28 +54,23 @@ def run():
                 try:
                     myData = get_my_data(myDesc, ytParsedDesc["test"], frontend)
                 except KeyError:
-                    error = True
                     msg = f"PYTEST KEYERROR: {ytDesc}\t{myDesc}\n"
-                    continue
+                    write_error(msg, frontend)
                 # Now compare the results
                 try:
                     compare_answers(ytData, myData, ytParsedDesc["test"], frontend)
                 except AssertionError:
-                    error = True
                     msg = f"RESULTS UNEQUAL: {ytDesc}\t{myDesc}\n"
-                    continue
+                    write_error(msg, frontend)
                 except ValueError:
-                    error = True
                     msg = f"TESTS NOT COMPARED: {ytDesc}\t{myDesc}\n"
-                    continue
+                    write_error(msg, frontend)
                 except KeyError:
-                    error = True
                     msg = f"KEYERROR: {ytDesc}\t{myDesc}\n"
-                    continue
+                    write_error(msg, frontend)
                 except:
-                    error = True
                     msg = f"UNHANDLED EXCEPTION: {ytDesc}\t{myDesc}\n"
-                    continue
+                    write_error(msg, frontend)
     progBar.finish()
 
 
