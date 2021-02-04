@@ -66,6 +66,12 @@ dsRegister = {
         "fof_subhalo_tab_005",
         "fof_subhalo_tab_042",
     ],
+    "gamer" : [
+        "jet_000002",
+        "psiDM_000020",
+        "plummer_000000",
+        "Data_000018",
+    ],
     "tipsy" : [
         "halo1e11_run1_00400",
         "agora_1e11_00400",
@@ -136,6 +142,14 @@ fieldRegister = {
         "('gas', 'temperature')",
         "('gas', 'velocity_magnitude')",
     ],
+    "gamer" : [
+        "velocity_magnitude",
+        "('gamer', 'ParDens')",
+        "('deposit', 'io_cic')",
+        "('gamer', 'CCMagX')",
+        "('gamer', 'CCMagY')",
+        "('gas', 'magnetic_energy')",
+    ],
     "tipsy" : [
         "particle_mass",
         "particle_velocity_x",
@@ -182,6 +196,9 @@ objRegister = {
     ],
     "gadget" : [
         "sphere_('c', (0_1, 'unitary'))",
+    ],
+    "gamer" : [
+        "sphere_('max', (0_1, 'unitary'))",
     ],
     "tipsy" : [
         "sphere_('c', (0_3, 'unitary'))",
