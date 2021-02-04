@@ -59,6 +59,9 @@ dsRegister = {
         "windtunnel_4lev_hdf5_plt_cnt_0030",
         "fiducial_1to3_b1_hdf5_part_0080",
     ],
+    "gadget" : [
+        "snap_505",
+    ],
     "tipsy" : [
         "halo1e11_run1_00400",
         "agora_1e11_00400",
@@ -124,6 +127,11 @@ fieldRegister = {
     "flash" : [
         "velocity_magnitude",
     ],
+    "gadget" : [
+        "('gas', 'density')",
+        "('gas', 'temperature')",
+        "('gas', 'velocity_magnitude')",
+    ],
     "tipsy" : [
         "particle_mass",
         "particle_velocity_x",
@@ -167,6 +175,9 @@ objRegister = {
     ],
     "flash" : [
         "sphere_('max', (0_1, 'unitary'))",
+    ],
+    "gadget" : [
+        "sphere_('c', (0_1, 'unitary'))",
     ],
     "tipsy" : [
         "sphere_('c', (0_3, 'unitary'))",
