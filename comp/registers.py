@@ -81,6 +81,9 @@ dsRegister = {
     "owls" : [
         "snap_033",
     ],
+    "rockstar" : [
+        "halos_0_0_bin",
+    ],
     "tipsy" : [
         "halo1e11_run1_00400",
         "agora_1e11_00400",
@@ -177,6 +180,12 @@ fieldRegister = {
         "('gas', 'temperature')",
         "('gas', 'velocity_magnitude')",
         "('gas', 'He_p0_number_density')",
+    ],
+    "rockstar" : [
+        "particle_position_x",
+        "particle_position_y",
+        "particle_position_z",
+        "particle_mass",
     ],
     "tipsy" : [
         "particle_mass",
