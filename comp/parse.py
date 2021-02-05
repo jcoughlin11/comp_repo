@@ -127,7 +127,10 @@ def camel_to_snake(camel):
     produces by pytest have snake_case.
     """
     pattern = re.compile(r'(?<!^)(?=[A-Z])')
-    return pattern.sub('_', camel).lower()
+    if camel == "YTDataTest":
+        return "yt_data_field"
+    else:
+        return pattern.sub('_', camel).lower()
 
 
 # ============================================

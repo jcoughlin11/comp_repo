@@ -6,6 +6,7 @@ testRegister = [
     "field_values",
     "pixelized_projection_values",
     "pixelized_particle_projection_values",
+    "yt_data_field",
 ]
 
 
@@ -88,7 +89,17 @@ dsRegister = {
         "halo1e11_run1_00400",
         "agora_1e11_00400",
         "galaxy_00300",
-    ]
+    ],
+    "ytdata" : [
+        "DD0046_sphere_h5",
+        "DD0046_covering_grid_h5",
+        "DD0046_arbitrary_grid_h5",
+        "DD0046_quad_proj_h5",
+        "DD0046_Profile1D_h5",
+        "DD0046_Profile2D_h5",
+        "test_data_h5",
+        "random_data_h5",
+    ],
 }
 
 # Field register. Contains the fields whose names have underscores in
@@ -195,6 +206,14 @@ fieldRegister = {
         "particle_ones",
         "velocity_magnitude",
         "Fe_fraction",
+    ],
+    "ytdata" : [
+        "('grid', 'density')",
+        "('all', 'particle_mass')",
+        "region_density",
+        "sphere_density",
+        "cell_mass",
+        "('density',)",
     ],
 }
 
