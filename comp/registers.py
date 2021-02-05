@@ -78,6 +78,9 @@ dsRegister = {
     "gizmo" : [
         "snap_N64L16_135",
     ],
+    "owls" : [
+        "snap_033",
+    ],
     "tipsy" : [
         "halo1e11_run1_00400",
         "agora_1e11_00400",
@@ -169,6 +172,12 @@ fieldRegister = {
     "moab" : [
         "('moab', 'flux')",
     ],
+    "owls" : [
+        "('gas', 'density')",
+        "('gas', 'temperature')",
+        "('gas', 'velocity_magnitude')",
+        "('gas', 'He_p0_number_density')",
+    ],
     "tipsy" : [
         "particle_mass",
         "particle_velocity_x",
@@ -228,6 +237,9 @@ objRegister = {
     "moab" : [
         "sphere_('c', (0_1, 'unitary'))",
         "sphere_('c', (0_2, 'unitary'))",
+    ],
+    "owls" : [
+        "sphere_('c', (0_1, 'unitary'))",
     ],
     "tipsy" : [
         "sphere_('c', (0_3, 'unitary'))",
