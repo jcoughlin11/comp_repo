@@ -2,6 +2,7 @@ import re
 
 from .registers import dsRegister
 from .registers import fieldRegister
+from .registers import geomRegister
 from .registers import objRegister
 
 
@@ -46,6 +47,7 @@ def sanitize_yt_desc(desc, frontend):
     desc = sanitize_component(desc, "field", frontend)
     # Objects
     desc = sanitize_component(desc, "object", frontend)
+    desc = sanitize_component(desc, "geom", frontend)
     return desc.split("_")
 
 
@@ -66,6 +68,11 @@ def sanitize_component(desc, componentType, frontend):
     elif componentType == "object":
         try:
             register = objRegister[frontend]
+        except KeyError:
+            return desc
+    elif componentType == "geom":
+        try:
+            register = geomRegister[frontend]
         except KeyError:
             return desc
     for comp in register:
@@ -106,16 +113,17 @@ def undo_string_compressions(params, frontend):
     # Don't need to undo the dobj joining since the joined version
     # should already match the pytest version.
     # NOTE: Get ds from the key in the shelve file
-    try:
-        reg = fieldRegister[frontend]
-    except KeyError:
-        return params
-    for comp in fieldRegister[frontend]:
-        joined = "".join(comp.split("_"))
-        # Use in and replace here because the field can be a tuple
-        if "f" in params:
-            if joined in params["f"]:
-                params["f"] = params["f"].replace(joined, comp)
+    for register, key in zip([fieldRegister, geomRegister], ["f", "geom"]):
+        try:
+            reg = register[frontend]
+        except KeyError:
+            continue
+        for comp in reg:
+            joined = "".join(comp.split("_"))
+            # Use in and replace here because the field can be a tuple
+            if key in params:
+                if joined in params[key]:
+                    params[key] = params[key].replace(joined, comp)
     return params
 
 # ============================================
@@ -170,5 +178,5 @@ def get_other_yt_params(testName, otherComponents):
         otherParams["attr_args"] = otherComponents[4]
         otherParams["callback_id"] = otherComponents[5]
     elif testName in ["vr_image_comparison",]:
-        otherParams["desc"]: = otherComponents[0]
+        otherParams["desc"] = otherComponents[0]
     return otherParams

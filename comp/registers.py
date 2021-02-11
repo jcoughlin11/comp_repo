@@ -281,6 +281,12 @@ objRegister = {
     ],
 }
 
+geomRegister = {
+    "axial_pixelization" : [
+        "internal_geographic",
+    ],
+}
+
 
 # For some frontends, nose uses an alias for certain fields. This
 # causes a KeyError in comp_dict, so this register serves as a map

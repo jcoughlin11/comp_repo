@@ -61,6 +61,14 @@ def convert_pytest_params(params, ytParams):
                         assert value == "all"
                     except AssertionError:
                         return None
+                # The axial pixelization test actually uses fake data, so
+                # the ds isn't parametrizedd and therefore not saved to
+                # params in the yaml file. The nose version saves each
+                # instance as the same ds name anyway, despite the fact
+                # that each one is created with a different geometry, so
+                # even if I did save it, they would all match anyway
+                elif key == "ds" and ytParams["test"] == "axial_pixelization":
+                    convParams[key] = value
                 else:
                     return None
     # For some reason nose stores fields as a full tuple...
