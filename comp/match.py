@@ -4,14 +4,17 @@ import yaml
 # ============================================
 #                 find_match
 # ============================================
-def find_match(ytParams, frontend):
+def find_match(ytParams, frontend, nf):
     """
     Finds the pytest test corresponding to the nose test. There isn't
     a direct mapping, so the bulk of the work is in converting the
     pytest parameters to match those of nose and then comparing the
     two.
     """
-    yf = "/home/latitude/data/yt_data/answers/frontends/"
+    if nf:
+        yf = "/home/latitude/data/yt_data/answers/non_frontends/"
+    else:
+        yf = "/home/latitude/data/yt_data/answers/frontends/"
     yf += f"{frontend}/{frontend}_answers_000.yaml"
     with open(yf, "r") as fd:
         tests = yaml.safe_load(fd)

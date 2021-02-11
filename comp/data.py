@@ -5,13 +5,16 @@ import numpy as np
 # ============================================
 #                get_my_data
 # ============================================
-def get_my_data(desc, test, frontend):
+def get_my_data(desc, test, frontend, nf):
     # The description passed is the one from the yaml file, which can
     # have slashes in it. The hdf5 version does not because that creates
     # erroneous groups
     myData = None
     desc = desc.replace("/", "_")
-    hf = "/home/latitude/data/yt_data/answers/frontends/"
+    if nf:
+        hf = "/home/latitude/data/yt_data/answers/non_frontends/"
+    else:
+        hf = "/home/latitude/data/yt_data/answers/frontends/"
     hf += f"{frontend}/{frontend}_answers_raw_000.h5"
     with h5py.File(hf, "r") as fd:
         data = fd[desc][test]

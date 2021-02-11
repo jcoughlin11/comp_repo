@@ -25,7 +25,11 @@ def run():
     clArgs = parse_args()
     frontend = clArgs.frontend
     debug = clArgs.pdb
-    path = "/home/latitude/data/yt_data/answers/frontends"
+    nf = clArgs.nf
+    if nf:
+        path = "/home/latitude/data/yt_data/answers/non_frontends"
+    else:
+        path = "/home/latitude/data/yt_data/answers/frontends"
     fname = f"{frontend}/local-{frontend}/local-{frontend}"
     noseFile = os.path.join(path, fname)
     progBar = get_prog_bar(noseFile)
@@ -45,32 +49,32 @@ def run():
                     assert ytParsedDesc["test"] in testRegister
                 except AssertionError:
                     msg = f"NOT IMPLEMENTED: {ytParsedDesc['test']}\n"
-                    write_error(msg, frontend)
+                    write_error(msg, frontend, nf)
                 # Find the matching pytest description
-                myDesc = find_match(ytParsedDesc, frontend)
+                myDesc = find_match(ytParsedDesc, frontend, nf)
                 # Load the yt data
                 ytData = yfd[ds][ytDesc]
                 # Load pytest data
                 try:
-                    myData = get_my_data(myDesc, ytParsedDesc["test"], frontend)
+                    myData = get_my_data(myDesc, ytParsedDesc["test"], frontend, nf)
                 except KeyError:
                     msg = f"PYTEST KEYERROR: {ytDesc}\t{myDesc}\n"
-                    write_error(msg, frontend)
+                    write_error(msg, frontend, nf)
                 # Now compare the results
                 try:
                     compare_answers(ytData, myData, ytParsedDesc["test"], frontend)
                 except AssertionError:
                     msg = f"RESULTS UNEQUAL: {ytDesc}\t{myDesc}\n"
-                    write_error(msg, frontend)
+                    write_error(msg, frontend, nf)
                 except ValueError:
                     msg = f"TESTS NOT COMPARED: {ytDesc}\t{myDesc}\n"
-                    write_error(msg, frontend)
+                    write_error(msg, frontend, nf)
                 except KeyError:
                     msg = f"KEYERROR: {ytDesc}\t{myDesc}\n"
-                    write_error(msg, frontend)
+                    write_error(msg, frontend, nf)
                 except:
                     msg = f"UNHANDLED EXCEPTION: {ytDesc}\t{myDesc}\n"
-                    write_error(msg, frontend)
+                    write_error(msg, frontend, nf)
     progBar.finish()
 
 
@@ -88,6 +92,12 @@ def parse_args():
         dest = "pdb",
         action = "store_true",
         help = "Use debugger,",
+    )
+    parser.add_argument(
+        "--nf",
+        dest = "nf",
+        action = "store_true",
+        help = "Indicates a non-frontend test.",
     )
     clArgs = parser.parse_args()
     return clArgs
@@ -116,8 +126,11 @@ def get_n_tests(noseFile):
 # ============================================
 #                 write_error
 # ============================================
-def write_error(msg, frontend):
-    errorFile = "/home/latitude/data/yt_data/answers/frontends/"
+def write_error(msg, frontend, nf):
+    if nf:
+        errorFile = "/home/latitude/data/yt_data/answers/non_frontends/"
+    else:
+        errorFile = "/home/latitude/data/yt_data/answers/frontends/"
     errorFile += f"{frontend}/{frontend}_failures.txt"
     with open(errorFile, "a") as ffd:
         ffd.write(msg)
