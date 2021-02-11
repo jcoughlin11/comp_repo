@@ -149,8 +149,26 @@ def get_other_yt_params(testName, otherComponents):
         otherParams["f"] = otherComponents[0]
         otherParams["a"] = otherComponents[1]
         otherParams["w"] = otherComponents[2]
-    elif testName in ["generic_array",]:
+    elif testName in ["generic_array", "generic_image",]:
         otherParams["func_name"] = otherComponents[0]
         otherParams["args"] = otherComponents[1]
         otherParams["kwargs"] = otherComponents[2]
+    elif testName in ["axial_pixelization",]:
+        otherParams["geom"] = otherComponents[0]
+    elif testName in ["phase_plot_attribute",]:
+        otherParams["plot_type"] = otherComponents[0]
+        otherParams["x_field"] = otherComponents[1]
+        otherParams["y_field"] = otherComponents[2]
+        otherParams["z_field"] = otherComponents[3]
+        otherParams["attr_name"] = otherComponents[4]
+        otherParams["attr_args"] = otherComponents[5]
+    elif testName in ["plot_window_attribute",]:
+        otherParams["plot_type"] = otherComponents[0]
+        otherParams["plot_field"] = otherComponents[1]
+        otherParams["plot_axis"] = otherComponents[2]
+        otherParams["attr_name"] = otherComponents[3]
+        otherParams["attr_args"] = otherComponents[4]
+        otherParams["callback_id"] = otherComponents[5]
+    elif testName in ["vr_image_comparison",]:
+        otherParams["desc"]: = otherComponents[0]
     return otherParams

@@ -7,6 +7,12 @@ testRegister = [
     "pixelized_projection_values",
     "pixelized_particle_projection_values",
     "yt_data_field",
+    "extract_connected_sets",
+    "generic_array",
+    "axial_pixelization",
+    "phase_plot_attribute",
+    "plot_window_attribute",
+    "vr_image_comparison",
 ]
 
 
