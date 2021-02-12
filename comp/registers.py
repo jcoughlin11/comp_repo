@@ -106,6 +106,10 @@ dsRegister = {
         "test_data_h5",
         "random_data_h5",
     ],
+    "xray" : [
+        "sloshing_low_res_hdf5_plt_cnt_0300",
+        "10MpcBox_HartGal_csf_a0_500_d",
+    ],
 }
 
 # Field register. Contains the fields whose names have underscores in
@@ -221,6 +225,17 @@ fieldRegister = {
         "cell_mass",
         "('density',)",
     ],
+    "xray" : [
+        "('gas', 'xray_emissivity_0_5_7_0_keV')",
+        "('gas', 'xray_luminosity_0_5_7_0_keV')",
+        "('gas', 'xray_photon_emissivity_0_5_7_0_keV')",
+        "('gas', 'xray_emissivity_0_5_2_0_keV')",
+        "('gas', 'xray_luminosity_0_5_2_0_keV')",
+        "('gas', 'xray_photon_emissivity_0_5_2_0_keV')",
+        "('gas', 'xray_intensity_0_5_2_0_keV')",
+        "('gas', 'xray_photon_intensity_0_5_2_0_keV')",
+        "('gas', 'xray_emissivity_0.5_2.0_keV')",
+    ],
 }
 
 
@@ -279,6 +294,9 @@ objRegister = {
         "sphere_('c', (0_3, 'unitary'))",
         "sphere_('c', (0_1, 'unitary'))",
     ],
+    "xray" : [
+        "sphere_('m', (0_1, 'unitary'))",
+    ],
 }
 
 geomRegister = {
@@ -291,9 +309,33 @@ geomRegister = {
 # For some frontends, nose uses an alias for certain fields. This
 # causes a KeyError in comp_dict, so this register serves as a map
 # between them
+# Also, some fields have dots in them like the sphere objs that nose uses
+# an underscore for, so those need to be handled correctly
 specialFields = {
     "athena" : {
         ('gas', 'density') : "('athena', 'density')",
         ('gas', 'total_energy') : "('athena', 'total_energy')",
     },
+    "xray" : {
+        "('gas', 'xray_emissivity_0_5_7_0_keV')" : "('gas', 'xray_emissivity_0.5_7.0_keV')",
+        "('gas', 'xray_luminosity_0_5_7_0_keV')" : "('gas', 'xray_luminosity_0.5_7.0_keV')",
+        "('gas', 'xray_photon_emissivity_0_5_7_0_keV')" : "('gas', 'xray_photon_emissivity_0.5_7.0_keV')",
+        "('gas', 'xray_emissivity_0_5_2_0_keV')" : "('gas', 'xray_emissivity_0.5_2.0_keV')",
+        "('gas', 'xray_luminosity_0_5_2_0_keV')" : "('gas', 'xray_luminosity_0.5_2.0_keV')",
+        "('gas', 'xray_photon_emissivity_0_5_2_0_keV')" : "('gas', 'xray_photon_emissivity_0.5_2.0_keV')",
+        "('gas', 'xray_intensity_0_5_2_0_keV')" : "('gas', 'xray_intensity_0.5_2.0_keV')",
+        "('gas', 'xray_photon_intensity_0_5_2_0_keV')" : "('gas', 'xray_photon_intensity_0.5_2.0_keV')",
+    },
+}
+
+# The dots in the xray fields screw up the string decompression
+xrayDecompress = {
+    "('gas', 'xrayemissivity0.57.0keV')" : "('gas', 'xray_emissivity_0.5_7.0_keV')",
+    "('gas', 'xrayluminosity0.57.0keV')" : "('gas', 'xray_luminosity_0.5_7.0_keV')",
+    "('gas', 'xrayphotonemissivity0.57.0keV')" : "('gas', 'xray_photon_emissivity_0.5_7.0_keV')",
+    "('gas', 'xrayemissivity0.52.0keV')" : "('gas', 'xray_emissivity_0.5_2.0_keV')",
+    "('gas', 'xrayluminosity0.52.0keV')" : "('gas', 'xray_luminosity_0.5_2.0_keV')",
+    "('gas', 'xrayphotonemissivity0.52.0keV')" : "('gas', 'xray_photon_emissivity_0.5_2.0_keV')",
+    "('gas', 'xrayintensity0.52.0keV')" : "('gas', 'xray_intensity_0.5_2.0_keV')",
+    "('gas', 'xrayphotonintensity0.52.0keV')" : "('gas', 'xray_photon_intensity_0.5_2.0_keV')",
 }

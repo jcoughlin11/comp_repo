@@ -4,6 +4,8 @@ from .registers import dsRegister
 from .registers import fieldRegister
 from .registers import geomRegister
 from .registers import objRegister
+from .registers import specialFields
+from .registers import xrayDecompress
 
 
 # ============================================
@@ -20,6 +22,12 @@ def parse_yt_desc(desc, frontend):
     """
     params = {}
     # Remove underscores from the names of the various components
+    # Some of the xray tests have a test suffix appended to the end of the
+    # description that does not correspond to any test parameter
+    if frontend == "xray":
+        for suffix in ["_dist_1Mpc", "_current_redshift"]:
+            if suffix in desc:
+                desc = desc.replace(suffix, "")
     components = sanitize_yt_desc(desc, frontend)
     params["test"] = camel_to_snake(components[0])
     params["ds"] = components[1]
@@ -81,6 +89,12 @@ def sanitize_component(desc, componentType, frontend):
                 sanitizedSphere = sanitize_sphere(comp)
                 desc = desc.replace(comp, sanitizedSphere)
             else:
+                try:
+                    sanitizedField = specialFields[frontend][comp]
+                    desc = desc.replace(comp, sanitizedField)
+                    comp = sanitizedField
+                except KeyError:
+                    pass
                 joined = "".join(comp.split("_"))
                 desc = desc.replace(comp, joined)
     return desc
@@ -93,6 +107,8 @@ def sanitize_sphere(comp):
     sanitized = "('sphere', ("
     if "max" in comp:
         sanitized += "'max', ("
+    elif "m" in comp:
+        sanitized += "'m', ("
     elif "c" in comp:
         sanitized += "'c', ("
     if "0_1" in comp:
@@ -124,6 +140,10 @@ def undo_string_compressions(params, frontend):
             if key in params:
                 if joined in params[key]:
                     params[key] = params[key].replace(joined, comp)
+    if frontend == "xray":
+        for f in xrayDecompress:
+            if f in params["f"]:
+                params["f"] = params["f"].replace(f, xrayDecompress[f])
     return params
 
 # ============================================

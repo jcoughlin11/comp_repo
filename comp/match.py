@@ -19,7 +19,7 @@ def find_match(ytParams, frontend, nf):
     with open(yf, "r") as fd:
         tests = yaml.safe_load(fd)
         for test, params in tests.items():
-            params = convert_pytest_params(params, ytParams)
+            params = convert_pytest_params(params, ytParams, frontend)
             if params == ytParams:
                 break
     return test
@@ -28,7 +28,7 @@ def find_match(ytParams, frontend, nf):
 # ============================================
 #           convert_pytest_params
 # ============================================
-def convert_pytest_params(params, ytParams):
+def convert_pytest_params(params, ytParams, frontend):
     """
     When dobj is None, the nose description has it logged as "all".
     Also need to extract the test in the case that there's more than
@@ -69,6 +69,11 @@ def convert_pytest_params(params, ytParams):
                 # even if I did save it, they would all match anyway
                 elif key == "ds" and ytParams["test"] == "axial_pixelization":
                     convParams[key] = value
+                # The weight is always None for the xray tests, which is why
+                # it's not parametrized in pytest, but for some reason nose
+                # saves it
+                elif key == 'w' and frontend == "xray":
+                    convParams[key] = 'None'
                 else:
                     return None
     # For some reason nose stores fields as a full tuple...
