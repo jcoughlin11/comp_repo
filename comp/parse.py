@@ -1,9 +1,13 @@
 import re
 
+from .registers import attrNameRegister
 from .registers import dsRegister
 from .registers import fieldRegister
+from .registers import funcNameRegister
 from .registers import geomRegister
 from .registers import objRegister
+from .registers import plotFieldRegister
+from .registers import particlePlotDecompress
 from .registers import specialFields
 from .registers import xrayDecompress
 
@@ -28,6 +32,9 @@ def parse_yt_desc(desc, frontend):
         for suffix in ["_dist_1Mpc", "_current_redshift"]:
             if suffix in desc:
                 desc = desc.replace(suffix, "")
+    if frontend == "particle_trajectories":
+        if desc.endswith("_None"):
+            desc = desc[:-5]
     components = sanitize_yt_desc(desc, frontend)
     params["test"] = camel_to_snake(components[0])
     params["ds"] = components[1]
@@ -56,6 +63,10 @@ def sanitize_yt_desc(desc, frontend):
     # Objects
     desc = sanitize_component(desc, "object", frontend)
     desc = sanitize_component(desc, "geom", frontend)
+    desc = sanitize_component(desc, "func_name", frontend)
+    # Misc; frontend specific
+    desc = sanitize_component(desc, "plot_field", frontend)
+    desc = sanitize_component(desc, "plot_attr", frontend)
     return desc.split("_")
 
 
@@ -83,6 +94,21 @@ def sanitize_component(desc, componentType, frontend):
             register = geomRegister[frontend]
         except KeyError:
             return desc
+    elif componentType == "func_name":
+        try:
+            register = funcNameRegister[frontend]
+        except KeyError:
+            return desc
+    elif componentType == "plot_field":
+        try:
+            register = plotFieldRegister[frontend]
+        except KeyError:
+            return desc
+    elif componentType == "plot_attr":
+        try:
+            register = attrNameRegister[frontend]
+        except KeyError:
+            return desc
     for comp in register:
         if comp in desc:
             if "sphere" in comp:
@@ -97,6 +123,17 @@ def sanitize_component(desc, componentType, frontend):
                     pass
                 joined = "".join(comp.split("_"))
                 desc = desc.replace(comp, joined)
+                # For these tests (particle_plot, etc.) both the attribute
+                # name and the attribute value are written in the description.
+                # Both need to be parsed, since they can both have underscores
+                # in them. As such, the attrNameRegister is a dictionary
+                # whose values are dictionaries containing the attribute name
+                # and the list of possible values that it can take
+                if componentType == "plot_attr":
+                    for attrVal in register[comp]:
+                        if "_" in attrVal:
+                            joined = "".join(attrVal.split("_"))
+                            desc = desc.replace(attrVal, joined)
     return desc
 
 
@@ -129,7 +166,19 @@ def undo_string_compressions(params, frontend):
     # Don't need to undo the dobj joining since the joined version
     # should already match the pytest version.
     # NOTE: Get ds from the key in the shelve file
-    for register, key in zip([fieldRegister, geomRegister], ["f", "geom"]):
+    registersToUndo = [
+        fieldRegister,
+        geomRegister,
+        attrNameRegister,
+        plotFieldRegister,
+    ]
+    paramKeyList = [
+        "f",
+        "geom",
+        "attr_name",
+        "plot_field",
+    ]
+    for register, key in zip(registersToUndo, paramKeyList):
         try:
             reg = register[frontend]
         except KeyError:
@@ -144,6 +193,14 @@ def undo_string_compressions(params, frontend):
         for f in xrayDecompress:
             if f in params["f"]:
                 params["f"] = params["f"].replace(f, xrayDecompress[f])
+    if frontend == "particle_trajectories":
+        for undFuncName, joinFuncName in funcNameRegister["particle_trajectories"].items():
+            if joinFuncName in params["func_name"]:
+                params["func_name"] = undFuncName
+    if frontend == "particle_plot":
+        for joinedAttr, actualAttr in particlePlotDecompress.items():
+            if joinedAttr in params["attr_args"]:
+                params["attr_args"] = actualAttr
     return params
 
 # ============================================
@@ -184,19 +241,22 @@ def get_other_yt_params(testName, otherComponents):
     elif testName in ["axial_pixelization",]:
         otherParams["geom"] = otherComponents[0]
     elif testName in ["phase_plot_attribute",]:
-        otherParams["plot_type"] = otherComponents[0]
+        otherParams["plot_type"] = camel_to_snake(otherComponents[0])
         otherParams["x_field"] = otherComponents[1]
         otherParams["y_field"] = otherComponents[2]
         otherParams["z_field"] = otherComponents[3]
         otherParams["attr_name"] = otherComponents[4]
         otherParams["attr_args"] = otherComponents[5]
     elif testName in ["plot_window_attribute",]:
-        otherParams["plot_type"] = otherComponents[0]
+        otherParams["plot_type"] = camel_to_snake(otherComponents[0])
         otherParams["plot_field"] = otherComponents[1]
-        otherParams["plot_axis"] = otherComponents[2]
+        otherParams["axis"] = otherComponents[2]
         otherParams["attr_name"] = otherComponents[3]
         otherParams["attr_args"] = otherComponents[4]
-        otherParams["callback_id"] = otherComponents[5]
+        try:
+            otherParams["callback_id"] = otherComponents[5]
+        except IndexError:
+            otherParams["callback_id"] = None
     elif testName in ["vr_image_comparison",]:
         otherParams["desc"] = otherComponents[0]
     return otherParams

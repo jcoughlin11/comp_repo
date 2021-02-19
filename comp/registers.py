@@ -1,3 +1,7 @@
+fontSet = "((OrderedDict([('family', 'sans-serif'), ('size', 24), "
+fontSet += "('style', 'italic'), ('weight', 'bold')]),), {})"
+
+
 testRegister = [
     "grid_hierarchy",
     "parentage_relationships",
@@ -87,6 +91,10 @@ dsRegister = {
     ],
     "owls" : [
         "snap_033",
+    ],
+    "particle_trajectories" : [
+        "orbit_hdf5_chk_0000",
+        "DD0000",
     ],
     "rockstar" : [
         "halos_0_0_bin",
@@ -201,6 +209,14 @@ fieldRegister = {
         "('gas', 'temperature')",
         "('gas', 'velocity_magnitude')",
         "('gas', 'He_p0_number_density')",
+    ],
+    "particle_trajectories" : [
+        "particle_position_x",
+        "particle_position_y",
+        "particle_position_z",
+        "particle_velocity_x",
+        "particle_velocity_y",
+        "particle_velocity_z",
     ],
     "rockstar" : [
         "particle_position_x",
@@ -338,4 +354,73 @@ xrayDecompress = {
     "('gas', 'xrayphotonemissivity0.52.0keV')" : "('gas', 'xray_photon_emissivity_0.5_2.0_keV')",
     "('gas', 'xrayintensity0.52.0keV')" : "('gas', 'xray_intensity_0.5_2.0_keV')",
     "('gas', 'xrayphotonintensity0.52.0keV')" : "('gas', 'xray_photon_intensity_0.5_2.0_keV')",
+}
+
+# For generic_array and generic_image, the function name can have underscores
+# The dictionary is underscore version : joined version because I use the key
+# when searching for things that need the underscore removed in parse
+funcNameRegister = {
+    "particle_trajectories" : {
+        "field_func" : "fieldfunc",
+    },
+}
+
+plotFieldRegister = {
+    "particle_plot" : [
+        "particle_mass",
+        "('formed_star', 'particle_mass')",
+        "particle_velocity_x",
+        "particle_velocity_y",
+    ],
+}
+
+attrNameRegister = {
+    "particle_plot" : {
+        "pan_rel" : ["(((0_1, 0_1),), {})"],
+        "pan" : ["(((0_1, 0_1),), {})"],
+        "set_axes_unit" : [
+            "(('kpc',), {})",
+            "(('Mpc',), {})",
+            "((('kpc', 'kpc'),), {})",
+            "((('kpc', 'Mpc'),), {})",
+        ],
+        "set_buff_size" : ["((1600,), {})", "(((600, 800),), {})"],
+        "set_center" : ["(((0_4, 0_3),), {})"],
+        "set_cmap" : [
+            "(('particle_mass', 'RdBu'), {})",
+            "(('particle_mass', 'kamae'), {})",
+        ],
+        "set_font" : [fontSet],
+        "set_log" : ["(('particle_mass', False), {})"],
+        "set_window_size" : ["((7_0,), {})"],
+        "set_zlim" : [
+            "(('particle_mass', 1e39, 1e42), {})",
+            "(('particle_mass', 1e39, None), {'dynamic_range': 4})",
+        ],
+        "zoom" : ["((10,), {})"],
+        "toggle_right_handed" : ["((), {})"],
+        "annotate_text": [
+            "(((5e-29, 5e7), 'Hello YT'), {})",
+            "(((5e-29, 5e7), 'Hello YT'), {'color': 'b'})",
+        ],
+        "set_title": ["(('particle_mass', 'A phase plot.'), {})"],
+        "set_unit": ["(('particle_mass', 'Msun'), {})"],
+        "set_xlim": ["((-4e7, 4e7), {})"],
+        "set_ylim": ["((-4e7, 4e7), {})"],
+    },
+}
+
+
+particlePlotDecompress = {
+    "(((01, 01),), {})" : "(((0.1, 0.1),), {})",
+    "(((01, 01),), {})" : "(((0.1, 0.1),), {})",
+    "(((04, 03),), {})" : "(((0.4, 0.3),), {})",
+    "(('particlemass', 'RdBu'), {})" : "(('particle_mass', 'RdBu'), {})",
+    "(('particlemass', 'kamae'), {})" : "(('particle_mass', 'kamae'), {})",
+    "(('particlemass', False), {})" : "(('particle_mass', False), {})",
+    "((70,), {})" : "((7_0,), {})",
+    "(('particlemass', 1e39, 1e42), {})" : "(('particle_mass', 1e39, 1e42), {})",
+    "(('particlemass', 1e39, None), {'dynamicrange': 4})" : "(('particle_mass', 1e39, None), {'dynamic_range': 4})",
+    "(('particlemass', 'A phase plot.'), {})" : "(('particle_mass', 'A phase plot.'), {})",
+    "(('particlemass', 'Msun'), {})" : "(('particle_mass', 'Msun'), {})",
 }

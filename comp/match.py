@@ -19,7 +19,7 @@ def find_match(ytParams, frontend, nf):
     with open(yf, "r") as fd:
         tests = yaml.safe_load(fd)
         for test, params in tests.items():
-            params = convert_pytest_params(params, ytParams, frontend)
+            params = convert_pytest_params(params, ytParams, frontend, test)
             if params == ytParams:
                 break
     return test
@@ -28,7 +28,7 @@ def find_match(ytParams, frontend, nf):
 # ============================================
 #           convert_pytest_params
 # ============================================
-def convert_pytest_params(params, ytParams, frontend):
+def convert_pytest_params(params, ytParams, frontend, test):
     """
     When dobj is None, the nose description has it logged as "all".
     Also need to extract the test in the case that there's more than
@@ -74,6 +74,35 @@ def convert_pytest_params(params, ytParams, frontend):
                 # saves it
                 elif key == 'w' and frontend == "xray":
                     convParams[key] = 'None'
+                elif key == "ds" and frontend == "particle_trajectories":
+                    if "orbit" in test:
+                        convParams[key] = "orbit_hdf5_chk_0000"
+                    elif "etc" in test:
+                        convParams[key] = "DD0000"
+                    else:
+                        convParams[key] = "None"
+                # The plot field is always the same, which is why pytest
+                # doesn't save it, but nose does
+                elif key == "plot_field" and frontend == "particle_plot":
+                    convParams[key] = ytParams[key]
+                # Pytest also doesn't save the plot type since, for a given
+                # function, it's always the same, but nose does
+                elif key == "plot_type" and frontend == "particle_plot":
+                    if "particle_projection" in test:
+                        convParams[key] = "particle_projection_plot"
+                    elif "phase" in test:
+                        convParams[key] = "particle_phase_plot"
+                    else:
+                        return None
+                # The callback also isn't stored. All the nose test descriptions
+                # end with "_", so when the split is done, the last element is
+                # ''. As such, when setting the callback_id in parse.py, it's
+                # never None
+                elif key == "callback_id" and frontend == "particle_plot":
+                   convParams[key] = ytParams[key] 
+                # Same with the ds
+                elif key == "ds" and frontend == "particle_plot":
+                    convParams[key] = ytParams[key]
                 else:
                     return None
     # For some reason nose stores fields as a full tuple...
