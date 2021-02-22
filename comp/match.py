@@ -103,6 +103,29 @@ def convert_pytest_params(params, ytParams, frontend, test):
                 # Same with the ds
                 elif key == "ds" and frontend == "particle_plot":
                     convParams[key] = ytParams[key]
+                # For plot_window, the ds isn't stored and the callback
+                # is stored with the key `callback`, not `callback_id`
+                elif key == "ds" and frontend == "plot_window":
+                    convParams[key] = ytParams[key]
+                # The way the tests are set up is that each plot_attribute_test
+                # is called both with and without the callback. pytest simply
+                # parametrizes this, so the results of both tests are saved
+                # in a single "entry" in the yaml file, with the keys
+                # `plot_window_attribute` and `plot_window_attribute_with_callback`.
+                # This means that simply assigning convParams["callback_id"] to
+                # whatever the value of callback is in params will cause the
+                # case of no callback to be skipped every time, since the pytest
+                # dictionary will always have a callback but nose won't, so the
+                # dictionary assertion done above will never work
+                elif key == "callback_id" and frontend == "plot_window":
+                    # If no callback, explicitly set pytest dict to not have
+                    # one so the dictionary comp can work
+                    if ytParams[key] == "":
+                        convParams[key] = ""
+                    # Otherwise, use the callback saved in the pytest file
+                    # so we can compare against it correctly
+                    else:
+                        convParams["callback_id"] = params["callback"]
                 else:
                     return None
     # For some reason nose stores fields as a full tuple...

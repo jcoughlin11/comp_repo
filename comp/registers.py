@@ -96,6 +96,10 @@ dsRegister = {
         "orbit_hdf5_chk_0000",
         "DD0000",
     ],
+    "plot_window" : [
+        "moving7_0010",
+        "windtunnel_4lev_hdf5_plt_cnt_0030",
+    ],
     "rockstar" : [
         "halos_0_0_bin",
     ],
@@ -372,6 +376,9 @@ plotFieldRegister = {
         "particle_velocity_x",
         "particle_velocity_y",
     ],
+    "profile_plots" : [
+        "cell_mass",
+    ],
 }
 
 attrNameRegister = {
@@ -408,6 +415,39 @@ attrNameRegister = {
         "set_xlim": ["((-4e7, 4e7), {})"],
         "set_ylim": ["((-4e7, 4e7), {})"],
     },
+    "profile_plots" : {
+        "annotate_text" : [
+            "(((5e-29, 50000000_0), 'Hello YT'), {})",
+            "(((5e-29, 50000000_0, 'Hello YT'), {'color': 'b'})",
+            ],
+        "set_title" : ["(('cell_mass', 'A phaseplot_'), {})"],
+        "set_log" : ["(('cell_mass', False), {})"],
+        "set_unit" : ["(('cell_mass', 'Msun'), {})"],
+        "set_xlim" : ["((1e-27, 1e-24), {})"],
+        "set_ylim" : ["((100_0, 1000000_0), {})"],
+    },
+    "plot_window" : {
+        "pan_rel" : ["(((0_1, 0_1),), {})"],
+        "pan" : ["(((0_1, 0_1),), {})"],
+        "set_axes_unit" : [
+            "(('kpc',), {})",
+            "(('Mpc',), {})",
+            "((('kpc', 'kpc'),), {})",
+            "((('kpc', 'Mpc'),), {})",
+        ],
+        "set_buff_size" : ["((1600,), {})", "(((600, 800),), {})"],
+        "set_center" : ["(((0_4, 0_3),), {})"],
+        "set_cmap" : [(("density", "RdBu"), {}), (("density", "kamae"), {})],
+        "set_font" : [fontSet],
+        "set_log" : [(("density", False), {})],
+        "set_window_size" : ["((7_0,), {})"],
+        "set_zlim" : [
+            "(('density', 1e-25, 1e-23), {})",
+            "(('density', 1e-25, None), {'dynamic_range': 4})",
+        ],
+        "zoom" : ["((10,), {})"],
+        "toggle_right_handed" : ["((), {})"],
+    },
 }
 
 
@@ -423,4 +463,31 @@ particlePlotDecompress = {
     "(('particlemass', 1e39, None), {'dynamicrange': 4})" : "(('particle_mass', 1e39, None), {'dynamic_range': 4})",
     "(('particlemass', 'A phase plot.'), {})" : "(('particle_mass', 'A phase plot.'), {})",
     "(('particlemass', 'Msun'), {})" : "(('particle_mass', 'Msun'), {})",
+}
+
+
+profilePlotsDecompress = {
+    "(((5e-29, 500000000), 'Hello YT'), {})" : "(((5e-29, 50000000.0), 'Hello YT'), {})",
+    "(((5e-29, 500000000, 'Hello YT'), {'color': 'b'})" : "(((5e-29, 50000000.0, 'Hello YT'), {'color': 'b'})",
+    "(('cellmass', 'A phaseplot'), {})" : "(('cell_mass', 'A phaseplot.'), {})",
+    "(('cellmass', False), {})" : "(('cell_mass', False), {})",
+    "(('cellmass', 'Msun'), {})" : "(('cell_mass', 'Msun'), {})",
+    "((1000, 10000000), {})" : "((100.0, 1000000.0), {})",
+}
+
+
+plotWindowDecompress = {
+   "(((01, 01),), {})" : "(((0.1, 0.1),), {})",
+   "(((01, 01),), {})" : "(((0.1, 0.1),), {})",
+   "(((04, 03),), {})" : "(((0.4, 0.3),), {})",
+   "((70,), {})" : "((7.0,), {})",
+   "(('density', 1e-25, None), {'dynamicrange': 4})" : "(('density', 1e-25, None), {'dynamic_range': 4})",
+}
+
+
+callbackRegister = {
+    "plot_window" : [
+        "simple_contour",
+        "simple_velocity",
+    ],
 }

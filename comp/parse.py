@@ -1,13 +1,16 @@
 import re
 
 from .registers import attrNameRegister
+from .registers import callbackRegister
 from .registers import dsRegister
 from .registers import fieldRegister
 from .registers import funcNameRegister
 from .registers import geomRegister
 from .registers import objRegister
-from .registers import plotFieldRegister
 from .registers import particlePlotDecompress
+from .registers import plotFieldRegister
+from .registers import plotWindowDecompress
+from .registers import profilePlotsDecompress
 from .registers import specialFields
 from .registers import xrayDecompress
 
@@ -43,6 +46,17 @@ def parse_yt_desc(desc, frontend):
     params.update(otherParams)
     # Undo the underscore removal
     params = undo_string_compressions(params, frontend)
+    # The way the tests are chosen is by using the name from the
+    # nose file, which will always be `plot_window_attribute`
+    # regardless of whether or not the callback is being used, which
+    # means the comparison will fail when it's supposed to be with
+    # the callback. As such, we explicitly set the test to the `with_callback`
+    # version here so that loading the pytest data will be done correctly
+    if frontend == "particle_plot":
+        if params["callback_id"] == "":
+            params["test"] = "plot_window_attribute"
+        else:
+            params["test"] = "plot_window_attribue_with_callback"
     return params
 
 
@@ -67,6 +81,7 @@ def sanitize_yt_desc(desc, frontend):
     # Misc; frontend specific
     desc = sanitize_component(desc, "plot_field", frontend)
     desc = sanitize_component(desc, "plot_attr", frontend)
+    desc = sanitize_component(desc, "callback", frontend)
     return desc.split("_")
 
 
@@ -107,6 +122,11 @@ def sanitize_component(desc, componentType, frontend):
     elif componentType == "plot_attr":
         try:
             register = attrNameRegister[frontend]
+        except KeyError:
+            return desc
+    elif componentType == "callback":
+        try:
+            register = callbackRegister[frontend]
         except KeyError:
             return desc
     for comp in register:
@@ -199,6 +219,10 @@ def undo_string_compressions(params, frontend):
                 params["func_name"] = undFuncName
     if frontend == "particle_plot":
         for joinedAttr, actualAttr in particlePlotDecompress.items():
+            if joinedAttr in params["attr_args"]:
+                params["attr_args"] = actualAttr
+    if frontend == "plot_window":
+        for joinedAttr, actualAttr in plotWindowDecompress.items():
             if joinedAttr in params["attr_args"]:
                 params["attr_args"] = actualAttr
     return params
